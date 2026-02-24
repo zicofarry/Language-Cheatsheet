@@ -1332,17 +1332,35 @@ func init() {
     // setup
 }
 
-// 6. Goroutine (concurrent execution)
+// 6. Goroutine (Concurrent execution)
 go func() {
     fmt.Println("running async")
 }()
 
-// 7. Channel (komunikasi antar goroutine)
+// 7. Channel (Komunikasi antar goroutine)
 ch := make(chan int)
 go func() { ch <- 42 }()
 val := <-ch  // 42
 
-// 8. Quick min/max dari slice
+// 8. Select (Multiplexing Channels)
+// Block & tunggu data dari beberapa channel sekaligus
+select {
+case msg1 := <-ch1:
+    fmt.Println("Received:", msg1)
+case msg2 := <-ch2:
+    fmt.Println("Received:", msg2)
+// case <-time.After(time.Second): // timeout pattern
+//     fmt.Println("Timeout")
+// default: // non-blocking mode
+//     fmt.Println("No data")
+}
+
+// 9. GOMAXPROCS (Concurrency vs Parallelism)
+runtime.GOMAXPROCS(0) // Cek jumlah thread yang dipakai (default = CPU core)
+// Concurrent = dikelola bersamaan (bisa bergantian)
+// Parallel = jalan di waktu yang sama (butuh > 1 core)
+
+// 10. Quick min/max dari slice
 func minSlice(s []int) int {
     m := s[0]
     for _, v := range s[1:] {
@@ -1353,7 +1371,7 @@ func minSlice(s []int) int {
     return m
 }
 
-// 9. Sum slice
+// 11. Sum slice
 func sumSlice(s []int) int {
     total := 0
     for _, v := range s {
@@ -1362,7 +1380,7 @@ func sumSlice(s []int) int {
     return total
 }
 
-// 10. Cek apakah angka prima
+// 12. Cek apakah angka prima
 func isPrime(n int) bool {
     if n < 2 {
         return false
@@ -1375,7 +1393,7 @@ func isPrime(n int) bool {
     return true
 }
 
-// 11. Digit sum
+// 13. Digit sum
 func digitSum(n int) int {
     sum := 0
     for n > 0 {
